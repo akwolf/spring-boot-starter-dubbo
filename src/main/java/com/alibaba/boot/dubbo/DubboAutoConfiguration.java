@@ -23,54 +23,57 @@ import com.alibaba.dubbo.config.RegistryConfig;
 @Configuration
 @EnableConfigurationProperties(DubboProperties.class)
 public class DubboAutoConfiguration {
-  @Autowired
-  private DubboProperties properties;
+    @Autowired
+    private DubboProperties properties;
 
-  @Bean
-  @ConditionalOnMissingBean
-  public ApplicationConfig dubboApplicationConfig() {
-    ApplicationConfig appConfig = new ApplicationConfig();
-    appConfig.setName(this.properties.getAppname());
-    return appConfig;
-  }
+    @Bean
+    @ConditionalOnMissingBean({ApplicationConfig.class})
+    public ApplicationConfig dubboApplicationConfig() {
+        ApplicationConfig appConfig = new ApplicationConfig();
+        appConfig.setName(this.properties.getAppname());
+        return appConfig;
+    }
 
-  @Bean
-  @ConditionalOnMissingBean
-  public ProtocolConfig dubboProtocolConfig() {
-    ProtocolConfig protocolConfig = new ProtocolConfig();
-    protocolConfig.setName(this.properties.getProtocol());
-    protocolConfig.setPort(this.properties.getPort());
-    protocolConfig.setThreads(this.properties.getThreads());
-    return protocolConfig;
-  }
+    @Bean
+    @ConditionalOnMissingBean({ProtocolConfig.class})
+    public ProtocolConfig dubboProtocolConfig() {
+        ProtocolConfig protocolConfig = new ProtocolConfig();
+        protocolConfig.setName(this.properties.getProtocol());
+        protocolConfig.setPort(this.properties.getPort());
+        protocolConfig.setThreads(this.properties.getThreads());
+        return protocolConfig;
+    }
 
-  @Bean
-  @ConditionalOnMissingBean
-  public RegistryConfig dubboRegistryConfig() {
-    RegistryConfig registryConfig = new RegistryConfig();
-    registryConfig.setAddress(this.properties.getRegistry());
-    return registryConfig;
-  }
-
-  @Bean
-  public DubboHealthIndicator dubboHealthIndicator() {
-    return new DubboHealthIndicator();
-  }
-
-  @Bean
-  public DubboEndpoint dubboEndpoint() {
-    return new DubboEndpoint();
-  }
-
-  @Bean
-  public DubboMetrics dubboConsumerMetrics() {
-    return new DubboMetrics();
-  }
+    @Bean
+    @ConditionalOnMissingBean({RegistryConfig.class})
+    public RegistryConfig dubboRegistryConfig() {
+        RegistryConfig registryConfig = new RegistryConfig();
+        registryConfig.setAddress(this.properties.getRegistry());
+        registryConfig.setGroup(this.properties.getGroup());
+        registryConfig.setCheck(Boolean.valueOf(this.properties.getCheck()));
+        return registryConfig;
+    }
 
 
-  @Bean
-  public DubboOperationEndpoint dubboOperationEndpoint() {
-    return new DubboOperationEndpoint();
-  }
+    @Bean
+    public DubboHealthIndicator dubboHealthIndicator() {
+        return new DubboHealthIndicator();
+    }
+
+    @Bean
+    public DubboEndpoint dubboEndpoint() {
+        return new DubboEndpoint();
+    }
+
+    @Bean
+    public DubboMetrics dubboConsumerMetrics() {
+        return new DubboMetrics();
+    }
+
+
+    @Bean
+    public DubboOperationEndpoint dubboOperationEndpoint() {
+        return new DubboOperationEndpoint();
+    }
 
 }

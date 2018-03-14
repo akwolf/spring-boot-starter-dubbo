@@ -41,6 +41,8 @@ public class DubboProperties {
    */
   private String group = "";
 
+  private String check = "";
+
   public String getAppname() {
     return this.appname;
   }
@@ -97,10 +99,15 @@ public class DubboProperties {
     this.group = group;
   }
 
-  @Override
+  public String getCheck() {
+    return this.check;
+  }
+
+  public void setCheck(String check) {
+    this.check = check;
+  }
+
   public String toString() {
-    return "DubboProperties [appname=" + this.appname + ", registry=" + this.registry
-        + ", protocol=" + this.protocol + ", port=" + this.port + ", threads=" + this.threads
-        + ", version=" + this.version + ", group=" + this.group + "]";
+    return "DubboProperties [appname=" + this.appname + ", registry=" + this.registry + ", protocol=" + this.protocol + ", port=" + this.port + ", threads=" + this.threads + ", version=" + this.version + ", group=" + this.group + ", check=" + this.check + "]";
   }
 }

@@ -13,7 +13,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.6</java.version>
-		<dubbo.version>2.5.3</dubbo.version>
+		<dubbo.version>2.5.4</dubbo.version>
 		<spring-boot-dependencies.version>1.3.5.RELEASE</spring-boot-dependencies.version>
 	</properties>
 
@@ -100,4 +100,20 @@
 			</roles>
 		</developer>
 	</developers>
+	<!-- 配置部署的远程仓库start -->
+	<distributionManagement>
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>nexus distribution snapshot repository</name>
+			<!--<url>http://192.168.0.91:8081/nexus/content/repositories/snapshots/</url>-->
+			<url>http://192.168.0.91:8081/repository/maven-snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>nexus-releases</id>
+			<name>nexus releases snapshot repository</name>
+			<!--<url>http://192.168.0.91:8081/nexus/content/repositories/releases/</url>-->
+			<url>http://192.168.0.91:8081/repository/maven-releases/</url>
+		</repository>
+	</distributionManagement>
+	<!-- 配置部署的远程仓库end -->
 </project>
