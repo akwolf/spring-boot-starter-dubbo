@@ -22,27 +22,27 @@ import com.alibaba.boot.dubbo.listener.StaticsFilterHelper;
 @Component
 public class DubboMetrics implements PublicMetrics {
 
-  @Override
-  public Collection<Metric<?>> metrics() {
-    List<Metric<?>> metrics = new LinkedList<Metric<?>>();
-    for (Map.Entry<ClassIdBean, Map<String, AtomicLong>> entry : StaticsFilterHelper.STATICS_DATA_MAP
-        .entrySet()) {
-      ClassIdBean classIdBean = entry.getKey();
-      Map<String, AtomicLong> countMap = entry.getValue();
-      for (Map.Entry<String, AtomicLong> entry1 : countMap.entrySet()) {
-        metrics.add(new Metric<Number>("dubbo." + classIdBean + "." + entry1.getKey(),
-            entry1.getValue().get()));
-      }
+    @Override
+    public Collection<Metric<?>> metrics() {
+        List<Metric<?>> metrics = new LinkedList<Metric<?>>();
+        for (Map.Entry<ClassIdBean, Map<String, AtomicLong>> entry : StaticsFilterHelper.STATICS_DATA_MAP
+                .entrySet()) {
+            ClassIdBean classIdBean = entry.getKey();
+            Map<String, AtomicLong> countMap = entry.getValue();
+            for (Map.Entry<String, AtomicLong> entry1 : countMap.entrySet()) {
+                metrics.add(new Metric<Number>("dubbo." + classIdBean + "." + entry1.getKey(),
+                        entry1.getValue().get()));
+            }
+        }
+//        for (Map.Entry<ClassIdBean, Map<String, AtomicLong>> entry : StaticsFilterHelper.STATICS_DATA_MAP
+//                .entrySet()) {
+//            ClassIdBean classIdBean = entry.getKey();
+//            Map<String, AtomicLong> countMap = entry.getValue();
+//            for (Map.Entry<String, AtomicLong> entry1 : countMap.entrySet()) {
+//                metrics.add(new Metric<Number>("dubbo." + classIdBean + "." + entry1.getKey(),
+//                        entry1.getValue().get()));
+//            }
+//        }
+        return metrics;
     }
-    for (Map.Entry<ClassIdBean, Map<String, AtomicLong>> entry : StaticsFilterHelper.STATICS_DATA_MAP
-        .entrySet()) {
-      ClassIdBean classIdBean = entry.getKey();
-      Map<String, AtomicLong> countMap = entry.getValue();
-      for (Map.Entry<String, AtomicLong> entry1 : countMap.entrySet()) {
-        metrics.add(new Metric<Number>("dubbo." + classIdBean + "." + entry1.getKey(),
-            entry1.getValue().get()));
-      }
-    }
-    return metrics;
-  }
 }
