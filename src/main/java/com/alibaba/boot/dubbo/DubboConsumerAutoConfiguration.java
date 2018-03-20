@@ -36,7 +36,7 @@ import com.alibaba.dubbo.config.spring.ReferenceBean;
 @ConditionalOnClass(Service.class)
 @ConditionalOnBean(annotation = EnableDubboConfiguration.class)
 @AutoConfigureAfter(DubboAutoConfiguration.class)
-@EnableConfigurationProperties(DubboProperties.class)
+@EnableConfigurationProperties(value = {DubboProperties.class, DubboConsumerProperties.class})
 public class DubboConsumerAutoConfiguration {
     public static final Map<ClassIdBean, Object> DUBBO_REFERENCES_MAP =
             new ConcurrentHashMap<ClassIdBean, Object>();
@@ -46,6 +46,9 @@ public class DubboConsumerAutoConfiguration {
 
     @Autowired
     private DubboProperties properties;
+
+    @Autowired
+    private DubboConsumerProperties consumerProperties;
 
     @Autowired
     private ApplicationConfig applicationConfig;
@@ -149,7 +152,7 @@ public class DubboConsumerAutoConfiguration {
             consumerBean.setGroup(group);
         }
         boolean check = dubboConsumer.check();
-        String checkStr = this.properties.getCheck();
+        String checkStr = this.consumerProperties.getCheck();
         if (checkStr != null || Arrays.asList("true", "false").contains(checkStr)) {
             check = Boolean.valueOf(checkStr).booleanValue();
         }
@@ -169,7 +172,7 @@ public class DubboConsumerAutoConfiguration {
         String protocol = dubboConsumer.protocol();
         consumerBean.setProtocol(protocol);
 //        boolean check = dubboConsumer.check();
-//        consumerBean.setCheck(check);
+        consumerBean.setCheck(check);
         boolean lazy = dubboConsumer.lazy();
         consumerBean.setLazy(lazy);
         int retries = dubboConsumer.retries();

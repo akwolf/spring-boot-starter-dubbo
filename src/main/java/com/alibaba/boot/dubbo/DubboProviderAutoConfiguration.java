@@ -29,12 +29,17 @@ import com.alibaba.dubbo.config.spring.ServiceBean;
 @ConditionalOnClass(Service.class)
 @ConditionalOnBean(annotation = EnableDubboConfiguration.class)
 @AutoConfigureAfter(DubboAutoConfiguration.class)
-@EnableConfigurationProperties(DubboProperties.class)
+@EnableConfigurationProperties(value = {DubboProperties.class, DubboProviderProperties.class})
 public class DubboProviderAutoConfiguration {
     @Autowired
     private ApplicationContext applicationContext;
     @Autowired
     private DubboProperties properties;
+
+
+    @Autowired
+    private DubboProviderProperties dubboProviderProperties;
+
     @Autowired
     private ApplicationConfig applicationConfig;
     @Autowired
@@ -54,7 +59,7 @@ public class DubboProviderAutoConfiguration {
     }
 
     public void initProviderBean(String beanName, Object bean) throws Exception {
-        Service service = (Service)this.applicationContext.findAnnotationOnBean(beanName, Service.class);
+        Service service = (Service) this.applicationContext.findAnnotationOnBean(beanName, Service.class);
         ServiceBean<Object> serviceConfig = new ServiceBean(service);
         if (Void.TYPE.equals(service.interfaceClass()) && "".equals(service.interfaceName())) {
             if (bean.getClass().getInterfaces().length <= 0) {
@@ -68,7 +73,6 @@ public class DubboProviderAutoConfiguration {
         if (version == null || "".equals(version)) {
             version = this.properties.getVersion();
         }
-
         if (version != null && !"".equals(version)) {
             serviceConfig.setVersion(version);
         }
@@ -81,6 +85,12 @@ public class DubboProviderAutoConfiguration {
         if (group != null && !"".equals(group)) {
             serviceConfig.setGroup(group);
         }
+
+        String timeout = this.dubboProviderProperties.getTimeout();
+        if (timeout != null && !"".equalsIgnoreCase(timeout)) {
+            serviceConfig.setTimeout(Integer.valueOf(timeout));
+        }
+
 
         serviceConfig.setApplicationContext(this.applicationContext);
         serviceConfig.setApplication(this.applicationConfig);

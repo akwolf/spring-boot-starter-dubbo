@@ -1,11 +1,5 @@
 package com.alibaba.boot.dubbo;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.alibaba.boot.dubbo.endpoint.DubboEndpoint;
 import com.alibaba.boot.dubbo.endpoint.DubboOperationEndpoint;
 import com.alibaba.boot.dubbo.health.DubboHealthIndicator;
@@ -13,6 +7,11 @@ import com.alibaba.boot.dubbo.metrics.DubboMetrics;
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ProtocolConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Dubbo common configuration
@@ -21,10 +20,13 @@ import com.alibaba.dubbo.config.RegistryConfig;
  * @since 1.0.0
  */
 @Configuration
-@EnableConfigurationProperties(DubboProperties.class)
+@EnableConfigurationProperties(value = {DubboProperties.class, DubboProviderProperties.class})
 public class DubboAutoConfiguration {
     @Autowired
     private DubboProperties properties;
+
+    @Autowired
+    private DubboProviderProperties dubboProviderProperties;
 
     @Bean
     @ConditionalOnMissingBean({ApplicationConfig.class})
@@ -50,7 +52,6 @@ public class DubboAutoConfiguration {
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setAddress(this.properties.getRegistry());
         registryConfig.setGroup(this.properties.getGroup());
-        registryConfig.setCheck(Boolean.valueOf(this.properties.getCheck()));
         return registryConfig;
     }
 
